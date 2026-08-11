@@ -7,5 +7,6 @@
     reversal-icon-theme
     kdePackages.kate
     protonup-qt
+    qbittorrent
   ];
 }

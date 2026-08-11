@@ -7,6 +7,12 @@
     ./docker.nix
   ];
 
+  # Bloatwares
+  environment.defaultPackages = with pkgs; [
+    curl
+    nano
+  ];
+
   # Performance boost when gaming
   programs.gamemode.enable = true;
 
