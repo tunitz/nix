@@ -2,7 +2,6 @@
 
 {
   imports = [
-    inputs.plasma-manager.homeModules.plasma-manager
     ./pkgs.nix
     ./plasma.nix
     ./git.nix
@@ -16,6 +15,6 @@
 
   programs.home-manager.enable = true;
 
-  # Do not change this value. It tracks the version of HM you started with.
+  # State version is tied to the host's installation date
   home.stateVersion = "26.05";
 }

@@ -20,6 +20,11 @@
   # Hardware acceleration
   hardware.graphics.enable = true;
 
-  # State version is tied to the host's installation date
-  system.stateVersion = "26.05";
+  # Maintain SSD performance
+  services.fstrim.enable = true;
+
+  # Keep CPU clocks high for lower latency
+  powerManagement.cpuFreqGovernor = "performance";
+
+  system.stateVersion = "23.11";
 }

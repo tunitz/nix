@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 
 {
 	# Enable CUPS to print documents.
@@ -23,10 +23,14 @@
 
 	# --- Global Nix Settings ---
 	nixpkgs.config.allowUnfree = true;
-	nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-	# Automatically optimize the Nix store to save disk space
-  nix.settings.auto-optimise-store = true;
+  nix.settings = {
+    experimental-features = [ "nix-command" "flakes" ];
+    auto-optimise-store = true;
+    warn-dirty = false;
+    cores = 0;
+    max-jobs = "auto";
+  };
 
   # Automatic Garbage Collection (deletes system generations older than 7 days)
   nix.gc = {
@@ -35,5 +39,6 @@
     options = "--delete-older-than 7d";
   };
 
-  nix.settings.warn-dirty = false; # Dont show git tree is dirty warning
+  # State version is tied to the host's installation date
+  system.stateVersion = lib.mkDefault "26.05";
 }
