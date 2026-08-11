@@ -20,12 +20,10 @@
   let 
     hostDir = ./host;
 
-    # Get all directory names inside ./host
     hostNames = builtins.attrNames (
       nixpkgs.lib.filterAttrs (name: type: type == "directory") (builtins.readDir hostDir)
     );
 
-    # Use 'host' instead of 'hostname' to match your module arguments
     mkSystem = host: nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = { inherit inputs host; };
@@ -47,7 +45,6 @@
     };
   in
   {
-    # Automatically map all host folders to nixosConfigurations
     nixosConfigurations = nixpkgs.lib.genAttrs hostNames mkSystem;
   };
 }
