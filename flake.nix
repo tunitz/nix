@@ -16,7 +16,7 @@
     };  
   };
 
-  outputs = {self, nixpkgs, home-manager, ...}@inputs: 
+  outputs = {self, nixpkgs, ...}@inputs: 
   let 
     hostDir = ./host;
 
@@ -29,18 +29,11 @@
       specialArgs = { inherit inputs host; };
       
       modules = [
+        ./host/default.nix
         ./host/${host}/default.nix
         ./system/default.nix
         ./system/${host}/default.nix
-        
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.backupFileExtension = "backup";
-          home-manager.extraSpecialArgs = { inherit inputs host; };
-          home-manager.users.${host} = import ./user/${host}/default.nix;
-        }
+        ./user/default.nix
       ];
     };
   in
