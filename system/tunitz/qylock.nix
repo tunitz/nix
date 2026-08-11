@@ -6,14 +6,14 @@
   ];
   programs.qylock = {
     enable = true;
-    theme = "pixel-night-city"; # Select themes here --> https://github.com/Darkkal44/qylock/tree/main/themes
+    theme = "last-of-us"; # Select themes here --> https://github.com/Darkkal44/qylock/tree/main/themes
     sddm.enable = true;
 
-    # themeOptions = {
-    #   terraria.backgroundMode = "time";
-    #   Genshin.backgroundMode = "time";
-    #   clockwork.orbital = { themeMode = "dark"; enableWindup = true; };
-    #   osu.gameMode = "menu";
-    # };
+    # Optional per-theme tweaks (replaces the interactive prompts):
+    themeOptions = {
+      last-of-us.backgroundMode = "time"; # time | random | static
+      last-of-us.gameMode = "menu";  # menu | game
+      # clockwork.orbital = { themeMode = "dark"; enableWindup = true; };
+    };
   };
 }
