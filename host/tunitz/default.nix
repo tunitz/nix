@@ -5,7 +5,7 @@
 
   users.users.${host} = {
     isNormalUser = true;
-    description = "${host}'s home";
+    description = "${host}";
     extraGroups = [ "networkmanager" "wheel" "docker" ];
   };
 }
