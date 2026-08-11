@@ -1,13 +1,13 @@
-# ❄️ Tun's NixOS Configuration
+# Useful commands so I don't forget
 
-A quick reference guide for managing, updating, and maintaining this NixOS flake configuration.
+Commands I need on a daily basis. I only have 256mb of brain memory
 
 ---
 
-## 🚀 System Deployment
+## System Deployment
 
 ### Apply Changes Immediately (Switch)
-Builds the new configuration and applies it to your current session right away. Use this for daily updates.
+Rebuilds and apply right away. (#tunitz) is the host name
 ```bash
 sudo nixos-rebuild switch --flake .#tunitz
 
@@ -15,7 +15,7 @@ sudo nixos-rebuild switch --flake .#tunitz
 
 ### Apply on Next Restart (Boot)
 
-Builds the new configuration but waits until you reboot to apply it. Use this for major kernel or display driver updates.
+Rebuilds and apply after reboot. (#tunitz) is the host name
 
 ```bash
 sudo nixos-rebuild boot --flake .#tunitz
@@ -24,7 +24,7 @@ sudo nixos-rebuild boot --flake .#tunitz
 
 ### Rollback System
 
-Instantly reverts your system back to the previous working generation if an update breaks something.
+Rollback to previous working build
 
 ```bash
 sudo nixos-rebuild switch --rollback
@@ -33,11 +33,11 @@ sudo nixos-rebuild switch --rollback
 
 ---
 
-## 🔄 Updates & Upgrades
+## Updates & Upgrades
 
 ### Update All Inputs
 
-Fetches the latest versions of all your flake inputs (`nixpkgs`, Home Manager, Plasma Manager).
+Update packages. Needs to rebuild after
 
 ```bash
 sudo nix flake update
@@ -55,7 +55,7 @@ sudo nix flake lock --update-input plasma-manager
 
 ---
 
-## 🧹 Storage & Maintenance
+## Storage & Maintenance
 
 ### Clean Up Old Builds (Safe)
 
@@ -86,7 +86,7 @@ nix store optimise
 
 ---
 
-## 🛠️ Troubleshooting
+## Troubleshooting
 
 ### Fix Git Permissions Error
 
