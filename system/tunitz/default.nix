@@ -19,9 +19,15 @@
   # Gaming kernel
   boot.kernelPackages = pkgs.linuxPackages_zen;
 
-  # --- Graphical Desktop (KDE Plasma for this PC) ---
+  # Display manager
   services.displayManager.sddm.enable = true;
-  services.desktopManager.plasma6.enable = true;
+  
+  # KDE Plasma
+  # services.desktopManager.plasma6.enable = true;
+
+  # Cosmic
+  services.displayManager.sddm.wayland.enable = true;
+  services.desktopManager.cosmic.enable = true;
   
   # Hardware acceleration
   hardware.graphics.enable = true;
