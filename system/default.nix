@@ -34,4 +34,6 @@
     dates = "weekly";
     options = "--delete-older-than 7d";
   };
+
+  nix.settings.warn-dirty = false; # Dont show git tree is dirty warning
 }
