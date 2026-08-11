@@ -1,8 +1,9 @@
-{ config, pkgs, inputs, host, ... }:
+{ pkgs, ... }:
 
 {
   imports = [
     ./hardware-configuration.nix
+    ./steam.nix
   ];
 
   # Performance boost when gaming
@@ -17,13 +18,6 @@
   
   # --- Virtualization ---
 	virtualisation.docker.enable = true;
-
-  # Steam
-  programs.steam = {
-    enable = true;
-    remotePlay.openFirewall = true; 
-    dedicatedServer.openFirewall = true; 
-  };
   
   # Hardware acceleration
   hardware.graphics.enable = true;
