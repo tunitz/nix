@@ -4,6 +4,7 @@
   imports = [
     ./hardware-configuration.nix
     ./steam.nix
+    ./docker.nix
   ];
 
   # Performance boost when gaming
@@ -15,9 +16,6 @@
   # --- Graphical Desktop (KDE Plasma for this PC) ---
   services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
-  
-  # --- Virtualization ---
-	virtualisation.docker.enable = true;
   
   # Hardware acceleration
   hardware.graphics.enable = true;
