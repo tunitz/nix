@@ -18,17 +18,22 @@
 
   outputs = {self, nixpkgs, home-manager, ...}@inputs: 
   let 
-    host = "tunitz";
-  in
-  {
-    nixosConfigurations.${host} = nixpkgs.lib.nixosSystem {
+    hostDir = ./host;
+
+    # Get all directory names inside ./host
+    hostNames = builtins.attrNames (
+      nixpkgs.lib.filterAttrs (name: type: type == "directory") (builtins.readDir hostDir)
+    );
+
+    # Use 'host' instead of 'hostname' to match your module arguments
+    mkSystem = host: nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = { inherit inputs host; };
       
       modules = [
-        ./host/${host}/default.nix # User related config
-        ./system/default.nix # Global system config
-        ./system/${host}/default.nix # User-related system config
+        ./host/${host}/default.nix
+        ./system/default.nix
+        ./system/${host}/default.nix
         
         home-manager.nixosModules.home-manager
         {
@@ -40,5 +45,9 @@
         }
       ];
     };
+  in
+  {
+    # Automatically map all host folders to nixosConfigurations
+    nixosConfigurations = nixpkgs.lib.genAttrs hostNames mkSystem;
   };
 }
