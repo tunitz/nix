@@ -1,14 +1,11 @@
-{ ... }:
+{ host, ... }:
 
-let
-  user = "tunitz";
-in
 {
-  networking.hostName = user;
+  networking.hostName = host;
 
-  users.users.${user} = {
+  users.users.${host} = {
     isNormalUser = true;
-    description = "${user}'s home";
+    description = "${host}'s home";
     extraGroups = [ "networkmanager" "wheel" "docker" ];
   };
 }
