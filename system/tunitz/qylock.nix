@@ -12,7 +12,7 @@
     # Optional per-theme tweaks (replaces the interactive prompts):
     themeOptions = {
       last-of-us.backgroundMode = "time"; # time | random | static
-      last-of-us.gameMode = "game";  # menu | game
+      last-of-us.gameMode = "menu";  # menu | game
       # clockwork.orbital = { themeMode = "dark"; enableWindup = true; };
     };
   };
