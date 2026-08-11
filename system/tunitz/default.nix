@@ -3,8 +3,10 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ./pkgs.nix
     ./steam.nix
     ./docker.nix
+    ./qylock.nix
   ];
 
   # Bloatwares
@@ -20,14 +22,19 @@
   boot.kernelPackages = pkgs.linuxPackages_zen;
 
   # Display manager
-  services.displayManager.sddm.enable = true;
+  services.displayManager.sddm = {
+    enable = true;
+    wayland.enable = true;
+    extraPackages = with pkgs; [
+      kdePackages.qt5compat # required for qylock themes
+    ];
+  };
   
-  # KDE Plasma
-  # services.desktopManager.plasma6.enable = true;
-
-  # Cosmic
-  services.displayManager.sddm.wayland.enable = true;
-  services.desktopManager.cosmic.enable = true;
+  # Desktops
+  services.desktopManager = {
+    cosmic.enable = true;
+    # plasma6.enable = true;
+  };
   
   # Hardware acceleration
   hardware.graphics.enable = true;
