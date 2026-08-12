@@ -32,8 +32,8 @@
   
   # Desktops
   services.desktopManager = {
-    cosmic.enable = true;
-    # plasma6.enable = true;
+    # cosmic.enable = true;
+    plasma6.enable = true;
   };
   
   # Hardware acceleration
