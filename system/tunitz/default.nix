@@ -1,18 +1,12 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 {
   imports = [
     ./hardware-configuration.nix
-    ./pkgs.nix
+    ./environment.nix
     ./steam.nix
     ./docker.nix
     ./qylock.nix
-  ];
-
-  # Bloatwares
-  environment.defaultPackages = with pkgs; [
-    curl
-    nano
   ];
 
   # Performance boost when gaming
@@ -20,6 +14,7 @@
 
   # Gaming kernel
   boot.kernelPackages = pkgs.linuxPackages_zen;
+  boot.initrd.kernelModules = [ "amdgpu" ];
 
   # Display manager
   services.displayManager.sddm = {
@@ -35,6 +30,13 @@
     # cosmic.enable = true;
     plasma6.enable = true;
   };
+
+  # Hyprland
+  # programs.hyprland = {
+  #   enable = true;
+  #   package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+  #   xwayland.enable = true;
+  # };
   
   # Hardware acceleration
   hardware.graphics.enable = true;
