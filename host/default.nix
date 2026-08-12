@@ -1,14 +1,22 @@
 /**
-  Default configuration for user related configs.
-  No need to modify this file, instead, create a directory with a default.nix file where you can customize as you want per host.
+  Base System Defaults Module
+  
+  Provides baseline system settings for timezone, localization, hostname, and the primary user account.
+  
+  To override any of these settings, you can optionally create a new directory containing a `default.nix` file where you can define your custom configurations. 
+  
+  Note: If you choose to do this, the directory name must exactly match the flake output name used in your rebuild command. 
+  For example, if your directory is named `mydirectory`, you would run:
+  sudo nixos-rebuild [switch/build/boot...] --flake .#mydirectory
 */
 { lib, host, ... }:
 
 {
-  # Region
+  # System Timezone
   time.timeZone = lib.mkDefault "Asia/Manila";
 
-  # Select internationalisation properties.
+  # Internationalization (i18n) & Regional Formatting
+  # Uses English (Philippines) for UI text, and Filipino standards for currency, dates, and measurements
   i18n = lib.mkDefault {
     defaultLocale = "en_PH.UTF-8";
     extraLocaleSettings = {
@@ -24,13 +32,16 @@
     };
   };
 
-  # Default hostname
+  # Set system hostname dynamically from the 'host' argument
   networking.hostName = lib.mkDefault host;
 
-  # Default user
+  # Primary User Account setup (defaults account name to match the 'host' argument)
   users.users.${host} = lib.mkDefault {
-    isNormalUser = true;
+    isNormalUser = true; # Allocates standard UID (>= 1000) and creates /home/${host}
     description = "${host}";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ 
+      "networkmanager"   # Allows user to connect/manage Wi-Fi & networks without sudo
+      "wheel"            # Grants sudo / admin privileges
+    ];
   };
 }
