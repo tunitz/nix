@@ -1,89 +1,33 @@
-# Useful commands so I don't forget
+# ❄️ Tunitz NixOS Configuration
 
-Commands I need on a daily basis. I only have 256mb of brain memory
+This is my NixOS configs. 
+I want this to be strict but modular where anyone can easily create their own configs for their own machine.
 
----
+## ✨ Features
 
-## System Deployment
-
-### Apply Changes Immediately (Switch)
-Rebuilds and apply right away. (#tunitz) is the host name
-```bash
-sudo nixos-rebuild switch --flake .#tunitz
-```
-
-### Apply on Next Restart (Boot)
-
-Rebuilds and apply after reboot. (#tunitz) is the host name
-
-```bash
-sudo nixos-rebuild boot --flake .#tunitz
-```
-
-### Rollback System
-
-Rollback to previous working build
-
-```bash
-sudo nixos-rebuild switch --rollback
-```
+* **Dynamic Host Generation**: The master flake automatically detects new machines based on folder names in the `host/`, `system/`, and `user/` directory.
+* **Strict Modularity**: Core plumbing is separated from hardware configs and user dotfiles.
 
 ---
 
-## Updates & Upgrades
+## 📂 Directory Architecture
 
-### Update All Inputs
+The repository enforces a strict 3-pillar structure: `host`, `system`, and `user`. 
 
-Update packages. Needs to rebuild after
-
-```bash
-sudo nix flake update
-```
-
-### Update a Specific Input
-
-Updates only one specific source without touching the rest of your system.
-
-```bash
-sudo nix flake lock --update-input plasma-manager
-```
-
----
-
-## Storage & Maintenance
-
-### Clean Up Old Builds (Safe)
-
-Deletes old system generations that are older than 7 days to free up disk space.
-
-```bash
-sudo nix-collect-garbage --delete-older-than 7d
-```
-
-### Clean Up All Old Builds (Aggressive)
-
-Deletes *all* previous system generations, keeping only the currently active one.
-
-```bash
-sudo nix-collect-garbage -d
-```
-
-### Optimize Nix Store
-
-Deduplicates identical files across the Nix store to reclaim storage space without deleting generations.
-
-```bash
-nix store optimise
-```
-
----
-
-## Troubleshooting
-
-### Fix Git Permissions Error
-
-Run this if `git add` throws an "insufficient permission" error because a rebuild caused files to be owned by `root`.
-
-```bash
-sudo chown -R $USER .git
-```
+```text
+.
+├── flake.nix                           # The master orchestrator
+├── host/                               # 1. Base network & user identities
+│   ├── default.nix                     # Global defaults (Timezone, Locales, User Groups)
+│   └── <hostname>/                     # (Optional) Host-specific overrides
+│
+├── system/                             # 2. System services & hardware
+│   ├── default.nix                     # Global services (Bootloader, PipeWire, SDDM, Garbage Collection)
+│   └── <hostname>/
+│       ├── default.nix                 # (REQUIRED) Machine-specific system overrides
+│       └── hardware-configuration.nix  # (REQUIRED) Auto-generated hardware profile
+│
+└── user/                               # 3. Home Manager & Dotfiles
+    ├── default.nix                     # Core Home Manager plumbing
+    └── <hostname>/
+        └── default.nix                 # (REQUIRED) User packages, dotfiles, and Desktop configs
