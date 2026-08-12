@@ -2,7 +2,7 @@
   Master Flake Configuration
 
   WARNING: CORE INFRASTRUCTURE FILE. Do not casually modify the logic in this file. 
-  This file acts as the central orchestrator for your entire NixOS setup. It dynamically reads your directory structure to generate machine configurations.
+  This file acts as the central orchestrator for the entire NixOS setup. It dynamically reads the directory structure to generate machine configurations.
   
   To add a new machine (host) to this setup:
   1. Host Specific Config (Optional): Create `./host/` (e.g., `./host/<hostname>/default.nix`). This is optional only, you can override some of the default configs tailored for your own machine

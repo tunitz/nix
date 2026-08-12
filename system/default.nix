@@ -3,7 +3,7 @@
   
   Provides baseline system settings for booting, hardware acceleration, audio, desktop environments, and Nix package management.
   
-  You are REQUIRED to create a new directory containing a `default.nix` file where you will define your custom configurations and overrides. 
+  REQUIRED to create a new directory containing a `default.nix` file where you will define your custom configurations and overrides. 
   Additionally, you must generate a hardware configuration file (`hardware-configuration.nix`) for your specific host machine and import it into that new `default.nix` file.
   
   Note: The directory name you create must exactly match the flake output name used in your rebuild command. 

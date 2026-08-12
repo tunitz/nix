@@ -3,7 +3,7 @@
   
   WARNING: Do not modify this file directly unless you know exactly what you are doing. This file handles the core plumbing required to integrate Home Manager with NixOS.
   
-  You are REQUIRED to create a new directory that exactly matches your host/user name (the `host` variable). Inside that directory, you must create a `default.nix` file.
+  REQUIRED to create a new directory that exactly matches your host/user name (the `host` variable). Inside that directory, you must create a `default.nix` file.
   This is where you will define all of your personal, user-level configurations (dotfiles, user packages, themes, etc.).
 
   Note: The directory name you create must exactly match the flake output name used in your rebuild command. 
