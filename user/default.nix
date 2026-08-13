@@ -1,40 +1,50 @@
 /**
-  Home Manager Integration Module
+  Base User Configuration (Home Manager)
   
   WARNING: Do not modify this file directly unless you know exactly what you are doing. This file handles the core plumbing required to integrate Home Manager with NixOS.
   
-  REQUIRED to create a new directory that exactly matches your host/user name (the `host` variable). Inside that directory, you must create a `default.nix` file.
-  This is where you will define all of your personal, user-level configurations (dotfiles, user packages, themes, etc.).
+  OPTIONAL: You can optionally create a new directory that exactly matches your host/user name (the `host` variable) containing a `default.nix` file.
+  This allows you to override these defaults and define machine-specific personal configurations, dotfiles, and themes.
 
-  Note: The directory name you create must exactly match the flake output name used in your rebuild command. 
-  For example, if your directory is named `mynewdirectory`, you would run:
-  sudo nixos-rebuild [switch/build/boot...] --flake .#mynewdirectory
+  Note: If you choose to create a host-specific directory, its name must exactly match the flake output name used in your rebuild command. 
+  For example, if your directory is named `my-pc`, you would run:
+  sudo nixos-rebuild [switch/build/boot...] --flake .#my-pc
 */
-{ inputs, host, ... }:
+{ lib, host, pkgs, ... }:
 
 {
-  # Import the Home Manager module from the flake inputs
-  imports = [
-    inputs.home-manager.nixosModules.home-manager
-  ];
+  # Identity
+  home.username = host;
+  home.homeDirectory = "/home/${host}";
 
-  # Core Home Manager Configuration
-  home-manager = {
-    # Use the system-level Nixpkgs instead of managing a separate instance for the user
-    useGlobalPkgs = true;
-    
-    # Install user packages directly to /etc/profiles/per-user instead of ~/.nix-profile
-    useUserPackages = true;
-    
-    # Automatically backup existing dotfiles (e.g., .bashrc -> .bashrc.backup) 
-    # to prevent build failures when Home Manager tries to manage them
-    backupFileExtension = "backup";
-    
-    # Pass flake inputs and the host variable down to your user-level configurations
-    extraSpecialArgs = { inherit inputs host; };
-    
-    # Dynamically map the primary user to their dedicated configuration folder
-    # This automatically imports the `./<host>/default.nix` file you are required to create
-    users.${host} = import ./${host}/default.nix; 
+  programs.home-manager.enable = true;
+
+  # Firefox Configuration
+  programs.firefox = lib.mkDefault {
+    enable = true;
+
+    # Enterprise Policies (Kills bloat & telemetry)
+    policies = {
+      DisablePocket = true;
+      DisableTelemetry = true;
+      DisableFirefoxStudies = true;
+      DontCheckDefaultBrowser = true;
+      
+      EnableTrackingProtection = {
+        Value = true;
+        Locked = true;
+        Cryptomining = true;
+        Fingerprinting = true;
+      };
+    };
   };
+
+  # VSCode because it's the best!
+  programs.vscode = lib.mkDefault {
+    enable = true;
+    package = pkgs.vscode;
+  };
+
+  # State version (Do not change this after initial installation)
+  home.stateVersion = "26.05";
 }

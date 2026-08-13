@@ -30,13 +30,6 @@
     # cosmic.enable = true;
     plasma6.enable = true;
   };
-
-  # Hyprland
-  # programs.hyprland = {
-  #   enable = true;
-  #   package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-  #   xwayland.enable = true;
-  # };
   
   # Hardware acceleration
   hardware.graphics.enable = true;

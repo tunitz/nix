@@ -7,7 +7,7 @@
   To add a new machine (host) to this setup:
   1. Host Specific Config (Optional): Create `./host/` (e.g., `./host/<hostname>/default.nix`). This is optional only, you can override some of the default configs tailored for your own machine
   2. System Level Config (Required): Create `./system/<hostname>/default.nix`. You must import your machine-specific `hardware-configuration.nix` here.
-  3. User Level Config (Required): Create `./user/<hostname>/default.nix`. Home Manager strictly requires this file to exist to map your user environment (it can be a blank `{ }` template if unused).
+  3. User Level Config (Optional): Create `./user/<hostname>/default.nix`. This is optional only, you can ovverride some of the default configs tailored for your own machine
 */
 {
   description = "tunitz nixos configs";
@@ -18,9 +18,6 @@
     
     # SDDM Themes
     qylock.url = "github:Darkkal44/qylock";
-    
-    # Wayland
-    hyprland.url = "github:hyprwm/Hyprland";
 
     # User environment manager
     home-manager = {
@@ -37,7 +34,7 @@
     };  
   };
 
-  outputs = { self, nixpkgs, ... } @ inputs: 
+  outputs = { self, nixpkgs, home-manager, ... } @ inputs: 
   let 
     # Define the directory where host configurations live
     hostDir = ./host;
@@ -58,13 +55,40 @@
       # Define the module tree. 
       # The `++` operator safely concatenates the mandatory lists with the optional overrides.
       modules = [
-        # Base templates (Mandatory for all hosts)
+        # Base NixOS templates (Mandatory for all hosts)
         ./host/default.nix
         ./system/default.nix
         ./system/${host}/default.nix
-        ./user/default.nix
-      ]
 
+        home-manager.nixosModules.home-manager
+
+        # Core Home Manager Configuration
+        ({
+          home-manager = {
+            # Use the system-level Nixpkgs instead of managing a separate instance for the user
+            useGlobalPkgs = true;
+            
+            # Install user packages directly to /etc/profiles/per-user instead of ~/.nix-profile
+            useUserPackages = true;
+            
+            # Automatically backup existing dotfiles (e.g., .bashrc -> .bashrc.backup) 
+            # to prevent build failures when Home Manager tries to manage them
+            backupFileExtension = "backup";
+            
+            # Pass flake inputs and the host variable down to your user-level configurations
+            extraSpecialArgs = { inherit inputs host; };
+            
+            # Dynamically map the primary user to their dedicated configuration folder
+            users.${host} = {
+              # This merges your base user template with the optional host-specific user template
+              imports = [
+                ./user/default.nix
+              ]
+              ++ nixpkgs.lib.optional (builtins.pathExists ./user/${host}/default.nix) ./user/${host}/default.nix;
+            };
+          };
+        })
+      ]
       # Conditionally load host-level overrides ONLY if the user created the file (Optional)
       ++ nixpkgs.lib.optional (builtins.pathExists ./host/${host}/default.nix) ./host/${host}/default.nix;
     };
